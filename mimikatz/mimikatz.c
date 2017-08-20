@@ -197,7 +197,7 @@ NTSTATUS mimikatz_doLocal(wchar_t * input)
 	return status;
 }
 
-size_t CALLBACK collectEntries(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
+size_t WINAPI collectEntries()
 {
 	if (s_list != NULL)
 	{
@@ -214,7 +214,7 @@ size_t CALLBACK collectEntries(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, i
 	return List_getLength(s_list);
 }
 
-LogonData CALLBACK getEntry(HWND hwnd, HINSTANCE hinst, LPWSTR lpszCmdLine, int nCmdShow)
+LogonData WINAPI getEntry()
 {
 	return List_pop(s_list);
 }

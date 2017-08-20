@@ -4,7 +4,7 @@
 	Licence : https://creativecommons.org/licenses/by/4.0/
 */
 #include "kuhl_m_sekurlsa.h"
-#include "../../logon_data.h"
+#include <mimikatz/logon_data.h>
 
 const KUHL_M_C kuhl_m_c_sekurlsa[] = {
 	{kuhl_m_sekurlsa_msv,				L"msv",				L"Lists LM & NTLM credentials"},
@@ -1081,7 +1081,8 @@ VOID kuhl_m_sekurlsa_genericCredsOutput(PKIWI_GENERIC_PRIMARY_CREDENTIAL mesCred
 
 							if ((lmHash != NULL) || (ntlmHash != NULL))
 							{
-								List_addItem(s_list, LogonData_create(username->Buffer, username->Length, NULL, 0, lmHash, ntlmHash));
+								LogonData* data = LogonData_create(username->Buffer, username->Length, NULL, 0, lmHash, ntlmHash);
+								List_addItem(s_list, data);
 							}
 						}
 						else

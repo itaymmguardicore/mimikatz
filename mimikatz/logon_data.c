@@ -1,14 +1,14 @@
 #include "logon_data.h"
 
-Node* Node_create(LogonData* item)
+LogonDataNode* Node_create(LogonData* item)
 {
-	Node* newNode = malloc(sizeof(Node));
+	LogonDataNode* newNode = malloc(sizeof(LogonDataNode));
 	newNode->data = item;
 	newNode->next = NULL;
 	return newNode;
 }
 
-void Node_delete(Node* node)
+void Node_delete(LogonDataNode* node)
 {
 	if (node != NULL)
 	{
@@ -16,22 +16,22 @@ void Node_delete(Node* node)
 	}
 }
 
-List* List_create()
+LogonDataList* List_create()
 {
-	List* list = malloc(sizeof(List));
+	LogonDataList* list = malloc(sizeof(LogonDataList));
 	list->length = 0;
 	list->first = NULL;
 	list->last = NULL;
 	return list;
 }
 
-void List_delete(List* list)
+void List_delete(LogonDataList* list)
 {
-	Node* node = list->first;
+	LogonDataNode* node = list->first;
 	
 	while (node != NULL)
 	{
-		Node* toDelete = node;
+		LogonDataNode* toDelete = node;
 		node = node->next;
 
 		LogonData_delete(toDelete->data);
@@ -41,10 +41,10 @@ void List_delete(List* list)
 	free(list);
 }
 
-void List_addItem(List* list, LogonData* item)
+void List_addItem(LogonDataList* list, LogonData* item)
 {
 	list->length++;
-	Node* newNode = Node_create(item);
+	LogonDataNode* newNode = Node_create(item);
 
 	if (list->first == NULL)
 	{
@@ -58,7 +58,7 @@ void List_addItem(List* list, LogonData* item)
 	}
 }
 
-LogonData List_pop(List* list)
+LogonData List_pop(LogonDataList* list)
 {
 	if ((list == NULL) || (list->length == 0))
 	{
@@ -68,13 +68,13 @@ LogonData List_pop(List* list)
 	list->length--;
 	LogonData logonData = *(list->first->data);
 	LogonData_delete(list->first->data);
-	Node* firstNode = list->first;
+	LogonDataNode* firstNode = list->first;
 	list->first = list->first->next;
 
 	return logonData;
 }
 
-size_t List_getLength(List* list)
+size_t List_getLength(LogonDataList* list)
 {
 	return list->length;
 }
@@ -83,7 +83,7 @@ LogonData* LogonData_create(WCHAR* username, size_t username_size, WCHAR* passwo
 {
 	LogonData* logonData = malloc(sizeof(LogonData));
 
-	memcpy_s(logonData->username, sizeof(WCHAR) * WINDOWS_MAX_USERNAME_PASS_LENGTH, username, sizeof(WCHAR) * username_size);
+	wcscpy_s(logonData->username, WINDOWS_MAX_USERNAME_PASS_LENGTH, username);
 	
 	if (password == NULL)
 	{
@@ -91,7 +91,7 @@ LogonData* LogonData_create(WCHAR* username, size_t username_size, WCHAR* passwo
 	}
 	else
 	{
-		memcpy_s(logonData->password, sizeof(WCHAR) * WINDOWS_MAX_USERNAME_PASS_LENGTH, password, sizeof(WCHAR) * password_size);
+		wcscpy_s(logonData->password, WINDOWS_MAX_USERNAME_PASS_LENGTH, password);
 	}
 
 	if (lmHash == NULL)

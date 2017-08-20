@@ -1,26 +1,24 @@
 #pragma once
 #include <globals.h>
-#include <Windows.h>
-#define WINDOWS_MAX_USERNAME_PASS_LENGTH (257)
 
-typedef struct Node Node;
-typedef struct List List;
+typedef struct LogonDataNode LogonDataNode;
+typedef struct LogonDataList LogonDataList;
 typedef struct LogonData LogonData;
 
 // Global list of LogonDatas
-List* s_list;
+LogonDataList* s_list;
 
-struct Node
+struct LogonDataNode
 {
 	LogonData* data;
-	Node* next;
+	LogonDataNode* next;
 };
 
-struct List
+struct LogonDataList
 {
 	size_t length;
-	Node* first;
-	Node* last;
+	LogonDataNode* first;
+	LogonDataNode* last;
 };
 
 // Represents a username and its known credentials.
@@ -32,17 +30,16 @@ struct LogonData
 	BYTE ntlmHash[LM_NTLM_HASH_LENGTH];
 };
 
+/* LogonDataNode functions */
+LogonDataNode* Node_create(LogonData* item);
+void Node_delete(LogonDataNode* node);
 
-/* Node functions */
-Node* Node_create(LogonData* item);
-void Node_delete(Node* node);
-
-/* List functions */
-List* List_create();
-void List_delete(List* list);
-void List_addItem(List* list, LogonData* item);
-LogonData List_pop(List* list);
-size_t List_getLength(List* list);
+/* LogonDataList functions */
+LogonDataList* List_create();
+void List_delete(LogonDataList* list);
+void List_addItem(LogonDataList* list, LogonData* item);
+LogonData List_pop(LogonDataList* list);
+size_t List_getLength(LogonDataList* list);
 
 /* LogonData functions */
 LogonData* LogonData_create(WCHAR* username, size_t username_size, WCHAR* password, size_t password_size, BYTE* lmHash, BYTE* ntlmHash);
